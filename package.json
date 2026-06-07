@@ -1,0 +1,37 @@
+{
+  "name": "@openapis/proxy",
+  "version": "0.1.0",
+  "description": "One-command setup to point Claude Code at the free OpenAPIs proxy. Auto-detects shell, edits your rc file idempotently, rolls back cleanly.",
+  "type": "module",
+  "bin": {
+    "openapis": "bin/openapis.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "openapis",
+    "claude-code",
+    "anthropic",
+    "proxy",
+    "cli",
+    "setup",
+    "ANTHROPIC_BASE_URL"
+  ],
+  "homepage": "https://openapis.online",
+  "bugs": {
+    "url": "https://github.com/IngARodriguez/openapis-cli/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IngARodriguez/openapis-cli.git"
+  },
+  "author": "IngARodriguez",
+  "license": "MIT"
+}
