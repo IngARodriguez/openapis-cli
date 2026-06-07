@@ -1,9 +1,9 @@
-# @openapis/proxy
+# @openapis-online/proxy
 
 One-command setup to point [Claude Code](https://docs.claude.com/en/docs/claude-code) at the free [OpenAPIs](https://openapis.online) proxy.
 
 ```bash
-npm install -g @openapis/proxy
+npm install -g @openapis-online/proxy
 openapis init
 ```
 
@@ -34,7 +34,7 @@ The configuration is written between sentinel comments so it can be removed clea
 
 ```
 # >>> openapis-cli >>>
-# Managed by @openapis/proxy. Run `openapis unlink` to remove.
+# Managed by @openapis-online/proxy. Run `openapis unlink` to remove.
 export ANTHROPIC_BASE_URL="https://api.openapis.online/anthropic"
 export ANTHROPIC_API_KEY="admin"
 # <<< openapis-cli <<<
