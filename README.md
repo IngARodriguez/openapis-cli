@@ -15,7 +15,7 @@ Writes two environment variables to your shell's startup file:
 
 ```
 ANTHROPIC_BASE_URL=https://api.openapis.online/anthropic
-ANTHROPIC_API_KEY=adminn69
+ANTHROPIC_API_KEY=admin
 ```
 
 Auto-detects your platform and shell:
@@ -36,7 +36,7 @@ The configuration is written between sentinel comments so it can be removed clea
 # >>> openapis-cli >>>
 # Managed by @openapis/proxy. Run `openapis unlink` to remove.
 export ANTHROPIC_BASE_URL="https://api.openapis.online/anthropic"
-export ANTHROPIC_API_KEY="adminn69"
+export ANTHROPIC_API_KEY="admin"
 # <<< openapis-cli <<<
 ```
 
@@ -47,7 +47,7 @@ A backup of your rc file is saved next to the original as `<file>.bak.openapis` 
 ```bash
 openapis init [--key VALUE] [--yes]
 ```
-Interactive setup. Prompts for the API key (default: `adminn69`, the public beta key). Use `--yes` for non-interactive mode (CI, scripts). Use `--key` to skip the prompt with a specific key.
+Interactive setup. Prompts for the API key (default: `admin`, the public beta key). Use `--yes` for non-interactive mode (CI, scripts). Use `--key` to skip the prompt with a specific key.
 
 ```bash
 openapis status
