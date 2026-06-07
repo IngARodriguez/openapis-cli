@@ -3,6 +3,7 @@ import { init } from "../src/commands/init.mjs";
 import { status } from "../src/commands/status.mjs";
 import { unlink } from "../src/commands/unlink.mjs";
 import { test } from "../src/commands/test.mjs";
+import { env as envCmd } from "../src/commands/env.mjs";
 import { red, dim, bold } from "../src/ui.mjs";
 
 const HELP = `${bold("openapis")} — Claude Code setup for the OpenAPIs proxy
@@ -13,6 +14,8 @@ ${bold("Usage:")}
 ${bold("Commands:")}
   init      Configure Claude Code to point at the OpenAPIs proxy (idempotent)
   status    Show whether the proxy config is active and what it looks like
+  env       Print shell commands to apply the config to the CURRENT session
+            (PowerShell: ${dim("iex (openapis env)")} · POSIX: ${dim("eval \"$(openapis env)\"")})
   test      Run a live request against the proxy to verify connectivity
   unlink    Remove the configuration block this CLI wrote
   help      Show this help
@@ -32,6 +35,9 @@ async function main() {
         return;
       case "test":
         await test();
+        return;
+      case "env":
+        await envCmd();
         return;
       case "unlink":
       case "uninstall":

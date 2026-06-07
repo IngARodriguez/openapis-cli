@@ -1,6 +1,6 @@
 {
   "name": "@openapis-online/proxy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "One-command setup to point Claude Code at the free OpenAPIs proxy. Auto-detects shell, edits your rc file idempotently, rolls back cleanly.",
   "type": "module",
   "bin": {

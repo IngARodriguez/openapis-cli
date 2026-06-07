@@ -103,14 +103,17 @@ async function writeRcFile(d, apiKey) {
   process.stdout.write("\n");
   process.stdout.write(`${bold("Next steps:")}\n`);
   if (d.kind === "powershell") {
-    process.stdout.write(`  1. Restart PowerShell (or run: ${cyan(`. $PROFILE`)})\n`);
+    process.stdout.write(`  Apply to THIS shell:  ${cyan(`iex (openapis env)`)}\n`);
+    process.stdout.write(`  Or restart PowerShell — your profile loads automatically.\n`);
   } else if (d.shell === "fish") {
-    process.stdout.write(`  1. Restart your shell (or run: ${cyan(`source ${d.rcPath}`)})\n`);
+    process.stdout.write(`  Apply to THIS shell:  ${cyan(`openapis env | source`)}\n`);
+    process.stdout.write(`  Or restart your shell — config.fish loads automatically.\n`);
   } else {
-    process.stdout.write(`  1. Restart your shell (or run: ${cyan(`source ${d.rcPath}`)})\n`);
+    process.stdout.write(`  Apply to THIS shell:  ${cyan(`eval "$(openapis env)"`)}\n`);
+    process.stdout.write(`  Or restart your shell — ${d.rcPath.split("/").pop()} loads automatically.\n`);
   }
-  process.stdout.write(`  2. Run ${cyan("claude")}\n`);
-  process.stdout.write(`\n${dim("Tip: `openapis status` to inspect · `openapis test` to verify connectivity · `openapis unlink` to remove.")}\n`);
+  process.stdout.write(`  Then run ${cyan("claude")}.\n`);
+  process.stdout.write(`\n${dim("Tip: `openapis status` to inspect · `openapis test` to verify · `openapis unlink` to remove.")}\n`);
 }
 
 async function writeCmd(apiKey) {

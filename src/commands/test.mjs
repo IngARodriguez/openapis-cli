@@ -1,4 +1,9 @@
-import { STATUS_URL, BASE_URL } from "../config.mjs";
+import { readFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
+
+import { STATUS_URL, BASE_URL, DEFAULT_KEY } from "../config.mjs";
+import { detect } from "../shells/detect.mjs";
+import { findBlock, ENV_VARS } from "../shells/block.mjs";
 import { header, ok, fail, info, dim, bold } from "../ui.mjs";
 
 // `openapis test` does TWO checks:
@@ -40,14 +45,28 @@ export async function test() {
   }
 
   // Step 2 — auth roundtrip via Anthropic-shaped POST.
-  const key = process.env.ANTHROPIC_API_KEY;
+  // Read from process.env first (fast path: the user already restarted
+  // their shell or piped `openapis env`). Fall back to parsing the rc
+  // file so init + test works without any reload.
+  let key = process.env.ANTHROPIC_API_KEY;
+  let base = process.env.ANTHROPIC_BASE_URL;
+  let source = "current shell";
+  if (!key || !base) {
+    const fromFile = await readFromRcFile();
+    if (fromFile) {
+      key = key || fromFile.ANTHROPIC_API_KEY;
+      base = base || fromFile.ANTHROPIC_BASE_URL;
+      source = "rc file";
+    }
+  }
   if (!key) {
-    info("ANTHROPIC_API_KEY is not set in this shell — skipping auth roundtrip.");
-    info(`(Tip: restart your shell after ${bold("openapis init")}, or pass --key.)`);
+    info(`ANTHROPIC_API_KEY not found in the current shell or rc file. Run ${bold("openapis init")} first.`);
     return;
   }
-
-  const base = process.env.ANTHROPIC_BASE_URL || BASE_URL;
+  if (!base) base = BASE_URL;
+  if (source === "rc file") {
+    info(`(Reading config from rc file — shell hasn't reloaded yet.)`);
+  }
   const url = `${base.replace(/\/+$/, "")}/v1/messages`;
   info(`POST ${url}`);
 
@@ -78,4 +97,35 @@ export async function test() {
   } catch (e) {
     fail(`Auth roundtrip failed: ${e.message}`);
   }
+}
+
+async function readFromRcFile() {
+  const d = detect();
+  if (d.kind === "cmd") return null;
+  if (!existsSync(d.rcPath)) return null;
+  let content;
+  try {
+    content = await readFile(d.rcPath, "utf8");
+  } catch {
+    return null;
+  }
+  const block = findBlock(content);
+  if (!block.found) return null;
+  const lines = content.split(/\r?\n/).slice(block.beginLine, block.endLine + 1);
+  const out = {};
+  const patterns = [
+    /^\s*export\s+([A-Z_][A-Z0-9_]*)=["']?([^"']*)["']?\s*$/i,
+    /^\s*\$env:([A-Z_][A-Z0-9_]*)\s*=\s*["']([^"']*)["']\s*$/i,
+    /^\s*set\s+-gx\s+([A-Z_][A-Z0-9_]*)\s+["']([^"']*)["']\s*$/i,
+  ];
+  for (const line of lines) {
+    for (const re of patterns) {
+      const m = re.exec(line);
+      if (m && ENV_VARS.includes(m[1])) {
+        out[m[1]] = m[2];
+        break;
+      }
+    }
+  }
+  return Object.keys(out).length ? out : null;
 }
