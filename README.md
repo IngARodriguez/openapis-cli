@@ -7,7 +7,24 @@ npm install -g @openapis-online/proxy
 openapis init
 ```
 
-That's it. Restart your shell, run `claude`, and you're talking to Anthropic through OpenAPIs.
+Open a new terminal window, run `claude`, and you're talking to Anthropic through OpenAPIs. (The new window picks up the configuration from your shell profile automatically — no reload needed.)
+
+Want to use Claude in the **same** shell you just ran `init` in? Pipe the env into your current session:
+
+```powershell
+# PowerShell
+iex (openapis env)
+```
+
+```bash
+# bash / zsh
+eval "$(openapis env)"
+```
+
+```fish
+# fish
+openapis env | source
+```
 
 ## What it does
 
